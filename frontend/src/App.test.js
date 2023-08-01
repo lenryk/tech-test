@@ -13,5 +13,19 @@ describe("main app tests", () => {
     expect(timeDifference).toBeInTheDocument();
   });
 
-  // TODO: add network data test
+  test("it renders time server data", async () => {
+    render(<App />);
+
+    const serverTime = await screen.findByText(/500/);
+    expect(serverTime).toBeInTheDocument();
+  });
+
+  test("it renders metric server data", async () => {
+    render(<App />);
+
+    const serverTime = await screen.findByText(
+      /# HELP http_request_duration_seconds Duration of HTTP requests in seconds/,
+    );
+    expect(serverTime).toBeInTheDocument();
+  });
 });

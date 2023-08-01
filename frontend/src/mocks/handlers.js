@@ -1,7 +1,7 @@
 import { rest } from "msw";
 
 export const handlers = [
-  rest.get("/time", (req, res, ctx) => {
+  rest.get("*/time", (req, res, ctx) => {
     return res(
       ctx.json({
         properties: {
@@ -18,7 +18,7 @@ export const handlers = [
     );
   }),
 
-  rest.get("/metrics", (req, res, ctx) => {
+  rest.get("*/metrics", (req, res, ctx) => {
     return res(
       ctx.text(`"# HELP http_request_duration_seconds Duration of HTTP requests in seconds
         # TYPE http_request_duration_seconds histogram
