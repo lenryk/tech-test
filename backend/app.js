@@ -1,11 +1,10 @@
-const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const promMid = require("express-prometheus-middleware");
 
-const indexRouter = require("./routes/index");
-const usersRouter = require("./routes/users");
+const timeRouter = require("./routes/time");
 
 const app = express();
 
@@ -19,12 +18,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
+app.use("/time", timeRouter);
+app.use(
+  promMid({
+    metricsPath: "/metrics",
+    collectDefaultMetrics: true,
+    collectGCMetrics: true,
+    metricsApp: app,
+  }),
+);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
+app.use(function (req, res) {
+  res.render("404");
 });
 
 // error handler
