@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import fetchFromAPI from "./utils/fetch";
 
 function App() {
+  const [serverTime, setServerTime] = useState();
+
+  // TODO: update to a more elegant solution like React Query
+  fetchFromAPI("time").then((data) =>
+    setServerTime(data.properties.epoch.value),
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <main className="app">
+      <section id="time" className="section-wrapper">
+        Server time: {serverTime}
+        <br />
+        Time difference between client and server:
+      </section>
+      <section id="metrics" className="metrics section-wrapper">
+        <pre>metrics</pre>
+      </section>
+    </main>
   );
 }
 
