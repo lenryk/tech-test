@@ -1,8 +1,15 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
+test("renders expected text", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const serverTime = screen.getByText(/Server time/);
+  const timeDifference = screen.getByText(
+    /Time difference between client and server/,
+  );
+
+  expect(serverTime).toBeInTheDocument();
+  expect(timeDifference).toBeInTheDocument();
 });
+
+// TODO: add network data test

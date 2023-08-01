@@ -1,17 +1,16 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import fetchFromAPI from "./utils/fetch";
-import stopwatchCalc from "./utils/stopwatchCalc";
+import stopwatchCalc from "./utils/stopwatchCalc/stopwatchCalc";
+import Section from "./components/Section";
 
 function App() {
   // TODO: refactor into useReducer
   const [serverTime, setServerTime] = useState(null);
-  const [timeDifference, setTimeDifference] = useState(null);
+  const [timeDifference, setTimeDifference] = useState(0);
   const [metrics, setMetrics] = useState(null);
-  const [isLoading, setIsLoading] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [hh, mm, ss] = stopwatchCalc(timeDifference);
-
-  console.log(hh, mm, ss);
 
   useEffect(() => {
     // TODO: update to a more elegant solution like React Query
@@ -28,15 +27,15 @@ function App() {
     }
     fetchData("time");
     fetchData("metrics");
-    setTimeDifference(Math.round(Date.now() / 1000 - serverTime));
 
     const fetchInterval = setInterval(() => {
       fetchData("time");
       fetchData("metrics");
     }, 5000);
 
+    // make this timeout lower (500) to render a 0 on the stopwatch view
     const timeDifferenceInterval = setInterval(
-      () => setTimeDifference(Math.round(Date.now() / 1000 - serverTime)),
+      () => setTimeDifference(Math.trunc(Date.now() / 1000 - serverTime)),
       1000,
     );
 
@@ -46,36 +45,18 @@ function App() {
     };
   }, [serverTime]);
 
-  // useEffect(() => {
-  //   setTimeDifference(Math.round(Date.now() / 1000 - serverTime));
-  // }, [serverTime]);
-
-  // console.log(Date.now() - timeDifference);
-
   return (
     <main className="app">
-      <section id="time" className="section-wrapper">
-        {isLoading ? (
-          <p>LOADING... </p>
-        ) : (
-          <span>
-            Server time (epoch seconds):{" "}
-            {serverTime ? serverTime : <div className="skeleton-placeholder" />}
-          </span>
-        )}
-        <br />
-        <span>
+      <Section name="time" isLoading={isLoading}>
+        <p>Server time (epoch seconds): {serverTime}</p>
+        <p>
           Time difference between client and server (HH:mm:ss):{" "}
-          {serverTime ? (
-            `${hh}:${mm}:${ss}`
-          ) : (
-            <div className="skeleton-placeholder" />
-          )}
-        </span>
-      </section>
-      <section id="metrics" className="metrics section-wrapper">
+          {`${hh}:${mm}:${ss}`}
+        </p>
+      </Section>
+      <Section name="metrics" isLoading={isLoading}>
         <pre>{metrics}</pre>
-      </section>
+      </Section>
     </main>
   );
 }

@@ -65,6 +65,7 @@ p, h1, h2, h3, h4, h5, h6 {
   height: 100vh;
   overflow: auto;
   padding: 1rem;
+  position: relative;
 }
 
 .skeleton-placeholder {
@@ -76,6 +77,30 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .loading {
   background-color: var(--grey);
-  opacity: 60%
+  opacity: 70%;
 }
 
+.loading-text {
+  font-size: 4rem;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 50%;
+  color: white;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.rotate {
+  animation: rotation 2s infinite linear;
+}
