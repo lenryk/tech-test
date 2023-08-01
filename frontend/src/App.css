@@ -47,6 +47,10 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 /* END OF CSS RESET */
 
+:root {
+  --grey: #484848;
+}
+
 .app {
   display:flex;
   flex-direction: row;
@@ -59,4 +63,19 @@ p, h1, h2, h3, h4, h5, h6 {
 .section-wrapper {
   width: 50vw;
   height: 100vh;
+  overflow: auto;
+  padding: 1rem;
 }
+
+.skeleton-placeholder {
+  display: inline-block;
+  height: 21px;
+  width: 87px;
+  background-color: var(--grey);
+}
+
+.loading {
+  background-color: var(--grey);
+  opacity: 60%
+}
+

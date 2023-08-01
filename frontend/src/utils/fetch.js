@@ -9,12 +9,19 @@ export default async function fetchFromAPI(endpoint) {
   });
 
   if (!response.ok) {
-    throw new Error(`An error has occurred: ${response.status}`);
+    throw new Error(`An error has occurred, status code: ${response.status}`);
   }
 
-  try {
+  if (endpoint === "time") {
     return await response.json();
-  } catch (err) {
-    throw new Error(`Failed to parse JSON: ${err.message}`);
   }
+  if (endpoint === "metrics") {
+    return await response.text();
+  }
+
+  // try {
+  //   return await response.json();
+  // } catch (err) {
+  //   return await response.text();
+  // }
 }
