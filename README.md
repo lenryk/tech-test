@@ -18,6 +18,8 @@ The default port for the backend is `8000` and can be accessed on http://localho
 
 There are also tests set up that can be run using `npm run test`
 
+The backend server must be live before running any tests.
+
 ## Frontend
 
 The `/frontend` folder contains the React frontend that should be run after the backend has started.

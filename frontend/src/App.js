@@ -1,8 +1,9 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import fetchFromAPI from "./utils/fetch";
 import stopwatchCalc from "./utils/stopwatchCalc/stopwatchCalc";
 import Section from "./components/Section";
+import useInterval from "./utils/useInterval";
 
 function App() {
   // TODO: refactor into useReducer
@@ -12,38 +13,32 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [hh, mm, ss] = stopwatchCalc(timeDifference);
 
-  useEffect(() => {
-    // TODO: update to a more elegant solution like React Query
-    async function fetchData(endpoint) {
-      setIsLoading(true);
-      const data = await fetchFromAPI(endpoint);
-      if (endpoint === "time") {
-        setServerTime(data.properties.epoch.value);
-      }
-      if (endpoint === "metrics") {
-        setMetrics(data);
-      }
-      setIsLoading(false);
+  // TODO: update to a more elegant solution like React Query
+  async function fetchData(endpoint) {
+    setIsLoading(true);
+    const data = await fetchFromAPI(endpoint);
+    if (endpoint === "time") {
+      setServerTime(data.properties.epoch.value);
     }
+    if (endpoint === "metrics") {
+      setMetrics(data);
+    }
+    setIsLoading(false);
+  }
+
+  useLayoutEffect(() => {
     fetchData("time");
     fetchData("metrics");
+  }, []);
 
-    const fetchInterval = setInterval(() => {
-      fetchData("time");
-      fetchData("metrics");
-    }, 5000);
+  useInterval(() => {
+    fetchData("time");
+    fetchData("metrics");
+  }, 30000);
 
-    // make this timeout lower (500) to render a 0 on the stopwatch view
-    const timeDifferenceInterval = setInterval(
-      () => setTimeDifference(Math.trunc(Date.now() / 1000 - serverTime)),
-      1000,
-    );
-
-    return () => {
-      clearInterval(fetchInterval);
-      clearInterval(timeDifferenceInterval);
-    };
-  }, [serverTime]);
+  useInterval(() => {
+    setTimeDifference(Math.trunc(Date.now() / 1000 - serverTime));
+  }, 1000);
 
   return (
     <main className="app">

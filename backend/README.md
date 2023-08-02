@@ -7,3 +7,5 @@ To run the backend run `npm run start` for the normal production build or `npm r
 The default port for the backend is `8000` and can be accessed on http://localhost:8000 once launched.
 
 There are also tests set up that can be run using `npm run test`
+
+The backend server must be live before running any tests.

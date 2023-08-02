@@ -18,10 +18,4 @@ export default async function fetchFromAPI(endpoint) {
   if (endpoint === "metrics") {
     return await response.text();
   }
-
-  // try {
-  //   return await response.json();
-  // } catch (err) {
-  //   return await response.text();
-  // }
 }
